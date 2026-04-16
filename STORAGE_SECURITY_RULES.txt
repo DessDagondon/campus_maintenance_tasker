@@ -1,0 +1,44 @@
+rules_version = '2';
+
+service firebase.storage {
+  match /b/{bucket}/o {
+    // ============================================================================
+    // STORAGE SECURITY RULES
+    // ============================================================================
+    
+    // Helper function to check if user is authenticated
+    function isAuth() {
+      return request.auth != null;
+    }
+
+    // Authenticated users can read all images
+    match /{allPaths=**} {
+      allow read: if isAuth();
+    }
+
+    // Facility images: admins can upload
+    match /facility_images/{fileName} {
+      allow write: if isAuth();
+      allow delete: if isAuth();
+    }
+
+    // Damage images: authenticated users can upload
+    match /damage_images/{fileName} {
+      allow write: if isAuth();
+      allow delete: if isAuth();
+    }
+
+    // Assignment images: authenticated users can upload
+    match /assignment_images/{fileName} {
+      allow write: if isAuth();
+      allow delete: if isAuth();
+    }
+
+    // Staff profile images: authenticated users can upload
+    match /staff_profiles/{fileName} {
+      allow write: if isAuth();
+      allow delete: if isAuth();
+    }
+
+  }
+}

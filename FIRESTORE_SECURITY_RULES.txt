@@ -1,0 +1,65 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // ============================================================================
+    // HELPER FUNCTIONS
+    // ============================================================================
+    function isAdmin() {
+      return request.auth != null && request.auth.token.role == "admin";
+    }
+
+    function isUser() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return request.auth != null && request.auth.uid == userId;
+    }
+
+    // ============================================================================
+    // USERS COLLECTION
+    // ============================================================================
+    // Users can read/write their own document and admins can read all
+    match /users/{userId} {
+      allow read: if isUser() && (isOwner(userId) || isAdmin());
+      allow write: if isOwner(userId) || isAdmin();
+      allow delete: if isAdmin();
+    }
+
+    // ============================================================================
+    // FACILITIES COLLECTION
+    // ============================================================================
+    // All authenticated users can read
+    // Only admins can create, update, delete
+    match /facilities/{facility} {
+      allow read: if isUser();
+      allow create, update: if isAdmin();
+      allow delete: if isAdmin();
+    }
+
+    // ============================================================================
+    // WORK_ORDERS COLLECTION (Reports & Assignments)
+    // ============================================================================
+    // All authenticated users can read
+    // Only admins can create, update, delete
+    match /work_orders/{order} {
+      allow read: if isUser();
+      allow create, update: if isAdmin();
+      allow delete: if isAdmin();
+    }
+
+    // ============================================================================
+    // STAFF COLLECTION
+    // ============================================================================
+    // All authenticated users can read
+    // Only admins can create, update, delete
+    match /staff/{staffMember} {
+      allow read: if isUser();
+      allow create, update: if isAdmin();
+      allow delete: if isAdmin();
+    }
+
+  }
+}
