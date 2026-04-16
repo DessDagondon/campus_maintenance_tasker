@@ -4,6 +4,9 @@
 - Flutter Elective Final Exam Project
 - A full-stack maintenance management system built with Flutter and Firebase. This application includes the process of reporting campus issues, assigning staff to assignments based on the assigned facility locations, and tracking work progress through real-time logs.
 
+# Firebase Database
+- URL: https://console.firebase.google.com/u/1/project/campusmaintenance-f1b6e/overview
+
 # Live Application (Backend Link)
 - URL: https://campusmaintenance-f1b6e.web.app
 
